@@ -100,6 +100,10 @@ socket.on("icecandidate", async (candidate) => {
   await pc.addIceCandidate(new RTCIceCandidate(candidate));
 });
 
+socket.on("user-left", (allUsers) => {
+  alert("User has already left the chat room");
+});
+
 const startCall = async (user) => {
   // console.log({ user });
   const pc = PeerConnection.getInstance();

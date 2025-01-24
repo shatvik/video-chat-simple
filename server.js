@@ -23,20 +23,38 @@ io.on("connection", (socket) => {
   // Example: Send a message to the client
   //   socket.emit("welcome", "Hello from server!");
   socket.on("join-user", (username) => {
-    // console.log(`User ${username} has joined`);
+    console.log(`User ${username} has joined`);
+    console.log(socket.id);
     allUsers[username] = { username, id: socket.id };
 
     io.emit("joined", allUsers);
   });
   socket.on("offer", ({ from, to, offer }) => {
     // console.log(from, to, offer);
-    io.to(allUsers[to].id).emit("offer", {from,to,offer});
+    try {
+      io.to(allUsers[to].id).emit("offer", { from, to, offer });
+    } catch (error) {
+      io.emit("user-left", allUsers);
+    }
   });
   socket.on("answer", ({ from, to, answer }) => {
     io.to(allUsers[from].id).emit("answer", { from, to, answer });
   });
   socket.on("icecandidate", (candidate) => {
     socket.broadcast.emit("icecandidate", candidate);
+  });
+  socket.on("disconnect", () => {
+    // Remove the user from allUsers[] based on their socket ID or name
+    console.log(socket.id);
+    let userExited = Object.values(allUsers).find(
+      (person) => person.id === socket.id
+    );
+    if (userExited) {
+      let quitingUser = userExited.username;
+      delete allUsers[quitingUser];
+    } else {
+      console.log("user not found");
+    }
   });
 });
 
