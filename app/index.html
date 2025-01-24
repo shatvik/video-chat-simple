@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video Chat App</title>
+    <script src="/js/socket.io.js" defer></script>
+    <script src="/js/main.js" defer></script>
+  </head>
+  <body>
+    <h1>Hello from client side</h1>
+    <div class="name-container">
+      <input type="text" placeholder="Enter name" id="username" />
+      <button id="submit-button">Submit</button>
+    </div>
+    <div id="allUserList"></div>
+    <div id="videos" style="display: flex; flex-direction: column">
+      <div>
+        <video id="localvideo" autoplay controls></video>
+        <!-- <button id="localvideobtn">video</button>
+        <button id="localaudiobtn">audio</button> -->
+      </div>
+      <div>
+        <video id="remotevideo" autoplay controls></video>
+        <!-- <button id="remotevideobtn">video</button>
+        <button id="remoteaudiobtn">audio</button> -->
+      </div>
+    </div>
+  </body>
+</html>
