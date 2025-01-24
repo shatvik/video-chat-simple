@@ -3,6 +3,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import nodemailer from "nodemailer";
 
 const app = express();
 const server = createServer(app);
@@ -24,6 +25,39 @@ io.on("connection", (socket) => {
   //   socket.emit("welcome", "Hello from server!");
   socket.on("join-user", (username) => {
     console.log(`User ${username} has joined`);
+    let emailBhejnewala = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      server: "gmail",
+      auth: {
+        user: "chandfakoo2@gmail.com",
+        pass: "dfdr faqk ubtx rivb",
+      },
+    });
+    let mailDetails = {
+      from: "chandfakoo2@gmail.com",
+      to: "fakoochand@gmail.com",
+      subject: `${username} is calling..`,
+      text: "Change to html view to see info",
+      html: `${username} is calling you...`,
+    };
+
+    emailBhejnewala
+      .sendMail(mailDetails)
+      .then((info) => {
+        console.log(info.messageId);
+        // return res.status(201).json({
+        //   msg: "Mail Sent successfully . Kindly check your inbox",
+        //   info: info.messageId,
+        //   acceptResponse: info.accepted,
+        // });
+      })
+      .catch((error) => {
+        // res.status(500).json({ error });
+        console.log(error.message);
+      });
+
     console.log(socket.id);
     allUsers[username] = { username, id: socket.id };
 
