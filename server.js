@@ -72,7 +72,11 @@ io.on("connection", (socket) => {
     }
   });
   socket.on("answer", ({ from, to, answer }) => {
-    io.to(allUsers[from].id).emit("answer", { from, to, answer });
+    try {
+      io.to(allUsers[from].id).emit("answer", { from, to, answer });
+    } catch (error) {
+      io.emit("user-left", allUsers);
+    }
   });
   socket.on("icecandidate", (candidate) => {
     socket.broadcast.emit("icecandidate", candidate);
